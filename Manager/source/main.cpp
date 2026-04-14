@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     while (appletMainLoop())
     {
         u64 kDown = Utils::GetControllerInputs();
-        if (kDown & KEY_PLUS || (kDown & KEY_B && stateMachine.currentState->name() == "main"))
+        if (kDown & HidNpadButton_Plus || (kDown & HidNpadButton_B && stateMachine.currentState->name() == "main"))
             break;
 
         printf(CONSOLE_ESC(2J));
