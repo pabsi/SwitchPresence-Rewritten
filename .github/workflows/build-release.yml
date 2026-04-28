@@ -1,0 +1,36 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: docker run --rm -v "$GITHUB_WORKSPACE:/project" -w /project devkitpro/devkita64:20230419 make
+
+      - name: Extract version
+        id: version
+        run: |
+          APP_VERSION=$(sed -n 's/^APP_VERSION[[:space:]]*:=[[:space:]]*//p' Manager/Makefile | tr -d '[:space:]')
+          echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" \
+            out/SwitchPresence-Rewritten-Manager.nro \
+            out/Sysmodule.zip \
+            --title "v${{ steps.version.outputs.version }}" \
+            --generate-notes
