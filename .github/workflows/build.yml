@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+    paths:
+      - 'Manager/**'
+      - 'Server/**'
+      - 'Makefile'
+      - 'VERSION'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'Manager/**'
+      - 'Server/**'
+      - 'Makefile'
+      - 'VERSION'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: docker run --rm -v "$GITHUB_WORKSPACE:/project" -w /project devkitpro/devkita64:20230419 make

@@ -45,7 +45,7 @@ INCLUDES	:=	include
 
 APP_TITLE   := SwitchPresence-Rewritten Manager
 APP_AUTHOR  := Sun
-APP_VERSION := 1.8.2
+APP_VERSION := $(strip $(shell cat ../VERSION))
 #ROMFS	:=	romfs
 #---------------------------------------------------------------------------------
 # options for code generation
